@@ -1,82 +1,63 @@
 #!/bin/bash
-while True
-do
-    #satirsay=$(cat foto.csv | wc -l )
-    #i=4
-    #harfsay=$(cat foto.csv | grep -w '1satir' | wc -c )
-    #echo $harfsay $satirsay
-    Klasor="foto-test"
-    strno=$( cat foto.csv | wc -l ) 
-	for (( i=1; i<=$strno; i++ ))
-	do
-		ad=$( sed -n "$i"p foto.csv | cut -f1 -d ";" )
-		ad2=$( sed -n "$i"p foto.csv | cut -f2 -d ";" )
-        echo "$ad -------------------------"
-        
-		if [ -e "$Klasor/$ad" ]
-		then
-            echo "doğrüüüüüüüüüüüü"
-			if [ -e "$Klasor/newfoto/$ad2" ]
-			then
-				jpg=$( echo $ad2 | cut -d "." -f2 )
-				asil=$( echo $ad2 | cut -d "." -f1 )
-				say=$( ls $Klasor/newfoto/ | grep $asil | wc -l )
-				kopy="$asil Copy($say) .$jpg"
-                echo $kopy
-                echo $Klasor/$kopy
-            else
-                echo burda
-            fi
-        fi
-    done
-    for file in $( ls foto-test )
-	do
-		filex=$( echo $file | cut -d "_" -f1 )
-        echo $filex
-    done
-    ad=$(cat foto.csv | cut -d ";" -f 3)
-    uniqsayi=$( ls foto-test/ | cut -d "_" -f1| uniq | wc -l )
-    uniq=$( ls foto-test/ | cut -d "_" -f1| uniq >> uniq.csv )
-    echo $uniqsayi
-    echo $uniq
-    echo "Bash version ${BASH_VERSION}..."
-    for (( i=1; i<=$uniqsayi; i++ ))
-    do 
-     echo "Welcome $i times"
-    done
-	for (( i=1; i<=$uniqsayi; i++ ))
-	do
-    echo " gel $i"
-    item=$( sed -n "$i"p uniq.csv )
-    echo $item
-    done
-    read -p "Devam edilsin mi? (y/n): " onay
-    if [ $onay == "y" ]
-    then
-            echo "Devam ediliyor."
-    else
-            break
-    fi
+clear
+su<<END
+if [ $? == 0 ] ;
+then
+    exit
+    echo "welcome $whoami" 
+else 
+    echo "Not root!"
 
-    for a in $ad
-    do
-        echo $a
-        ad1=$( cat foto.csv | grep -w $a | cut -f1 -d ";" )
-        ad2=$( cat foto.csv | grep -w $a | cut -f2 -d ";" )
-        jpg=$( echo $ad2 | cut -d "." -f2 )
-        asil=$( echo $ad2 | cut -d "." -f1 )
-        say=1 #$( ls $Klasor/newfoto/ | grep $asil | wc -l )
-        kopy="$asil copy($say) .$jpg"
-        echo $ad2
-        echo " $jpg  ve  $asil "
-        echo " kopyası $kopy "
-        read -p "Devam edilsin mi? (y/n): " onay
-        if [ $onay == "y" ]
-        then
-            echo "Devam ediliyor."
-        else
-            break
-        fi
-    # echo  " bu ne ya $a -- $ad1---  $ad2 "
-    done
-done
+fi
+END
+control=$(find . -name AccessLog.txt | wc -l)
+echo $control
+if [ $control = 0 ]; then
+sudo touch AccessLog.txt
+sudo chmod 777 AccessLog.txt
+fi
+num=$(cat AccessLog.txt | wc -l )
+date=$( date )
+sudo echo "$(($num+1)) $USER $date"  >> AccessLog.txt
+control=$( sudo yum list installed | grep python3 | wc -l )
+if [ $control = 0 ]
+then
+    echo "There is NO Python3....."
+else
+    echo "installing Python3...."
+    sudo yum install -y python3
+    sleep 1
+fi
+currentdir=$( pwd )
+p=$( echo $PATH )
+
+# code=$(cat<<END
+# r=False
+# print(r)
+# var = str('$p').split(":")
+# def odev(var):
+#     for i in var:
+#         print(i)
+#         if i=="$currentdir":
+#             print("------------------------")
+#             print("'$currentdir' in PATH")
+#             print("------------------------")
+#             r=True
+#     return r
+# print(r)
+# odev(var)
+# END
+# )
+control=$( sudo yum list installed | grep git | wc -l )
+if [ $control = 0 ]
+then
+    echo "There is NO Python3....."
+else
+    echo "installing Python3...."
+    sudo yum install -y git
+    sleep 1
+fi
+
+python -c "$code"
+python pyt.py
+echo $r
