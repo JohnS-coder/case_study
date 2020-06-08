@@ -58,6 +58,5 @@ else
     sleep 1
 fi
 
-python -c "$code"
-python pyt.py
-echo $r
+# python -c "$code"
+python phone_book.py
